@@ -1,1 +1,45 @@
 # assignment-repo
+
+#Command for build the image.
+
+docker build -t pythonapp:v1 .
+
+
+
+#Command to verify the image buid.
+
+docker images
+
+
+
+#Command for run the docker image by mapping the port.
+
+docker run -p 5000:5000 pythonapp:v1
+
+
+
+#Command to login to the docker hub by providing the credentials.
+
+docker login
+
+
+
+#Command to tag the docker image.
+
+docker tag pythonapp:v1 gamaka7/webapp:pythonapp
+
+
+
+#Command to push the docker image.
+
+docker push gamaka7/webapp:pythonapp
+
+
+
+#Command to pull the docker image.
+
+docker pull gamaka7/webapp:pythonapp
+
+
+
+
