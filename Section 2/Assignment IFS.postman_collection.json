@@ -1,0 +1,128 @@
+{
+	"info": {
+		"_postman_id": "010024d1-81cb-4289-a718-a4e2f27b7d6a",
+		"name": "Assignment IFS",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "28297585"
+	},
+	"item": [
+		{
+			"name": "Login",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.environment.set(\"TOKEN\", pm.response.json().access_token)\r",
+							"\r",
+							"pm.test(\"Response code is 200 OK\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Print access_token in console\", function () {\r",
+							"    console.log(pm.response.json().access_token);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "grant_type",
+							"value": "password",
+							"type": "text"
+						},
+						{
+							"key": "username",
+							"value": "alain",
+							"type": "text"
+						},
+						{
+							"key": "password",
+							"value": "alain",
+							"type": "text"
+						},
+						{
+							"key": "scope",
+							"value": "openid microprofile-jwt",
+							"type": "text"
+						},
+						{
+							"key": "client_id",
+							"value": "IFS_aurena",
+							"type": "text"
+						},
+						{
+							"key": "client_secret",
+							"value": "1jmRXzS2bx63k63r54JC",
+							"type": "text"
+						},
+						{
+							"key": "content-type",
+							"value": "application/json",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{AUTH_URL}}",
+					"host": [
+						"{{AUTH_URL}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get User info",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Response code is 200 OK\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Validate preferred username contains 'alain'\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.preferred_username).to.eql(\"alain\");\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{TOKEN}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{USER_INFO_URL}}",
+					"host": [
+						"{{USER_INFO_URL}}"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

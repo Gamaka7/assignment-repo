@@ -1,0 +1,37 @@
+#!/bin/bash
+
+# Configuration variables
+REMOTE_USER="username"                # Remote server username
+REMOTE_HOST="example.com"             # Remote server hostname or IP address
+REMOTE_PATH="/path/to/deployment"     # Remote server path for deployment
+LOCAL_PATH="/path/to/local"           # Local path of Flask web application
+
+# Compress the local Flask application
+tar -czf app.tar.gz -C $LOCAL_PATH .
+
+# Transfer the package to the remote server using SSH
+scp app.tar.gz $REMOTE_USER@$REMOTE_HOST:$REMOTE_PATH
+
+# Connect to the remote server and perform deployment tasks
+ssh $REMOTE_USER@$REMOTE_HOST << EOF
+    # Extract the application
+    tar -xzf $REMOTE_PATH/app.tar.gz -C $REMOTE_PATH
+
+    # Change directory to the application folder
+    cd $REMOTE_PATH
+
+    # Install dependencies
+    python3 -m venv venv            # Create a virtual environment
+    source venv/bin/activate        # Activate the virtual environment
+    pip install -r requirements.txt # Install Flask and other dependencies
+
+
+    # Restart the web server 
+    sudo systemctl restart nginx
+
+    # Clean up
+    rm $REMOTE_PATH/app.tar.gz
+EOF
+
+# Remove the local compressed application
+rm app.tar.gz
